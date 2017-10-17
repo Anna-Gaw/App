@@ -1,0 +1,16 @@
+{% extends "base.html" %}
+
+{% block content %}
+	{% csrf_token %}
+	
+	  {% for f in food %}
+	  	<hr>
+	  	<ul> <h3>{{f.get_type_display }}</h3> </ul>
+	  	<hr>
+	    	<li> {{ f.name }}  cena: {{ f.price }}  ilość: <input type = 'number' maxlenght='2' id ='quantity_id' }}></lo>
+	    
+	   {% endfor %}
+
+	<p> <a href = "{% url 'base' %}">Cofnij</a><p>
+
+{% endblock %}

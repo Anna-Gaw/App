@@ -1,0 +1,15 @@
+{% extends "base.html" %}
+
+{% block content %}
+	{% csrf_token %}
+		<p>Imię: {{ request.user.first_name }} </p>
+		<p>Nazwisko : {{ request.user.last_name }} </p>
+		<p>Nick: {{request.user.username }} </p>
+		<p>Email : {{ request.user.email }} </p>
+		<p>Ilość uzyskanych punktów:    </p>
+		
+		</b>
+		<p> <a href = "{% url 'order' %}">Przejdz do menu</a></p>
+		
+		
+{% endblock %}
