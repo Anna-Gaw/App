@@ -1,0 +1,16 @@
+{% extends "base.html" %}
+
+{% block content %}
+	{% csrf_token %}
+	<p> Lista Twoich zamówień</p>
+	<p>Ilosc zamowien: {{ ilosc_zamowien }}</p>
+	<p>Suma zamowien: {{ suma_zamowien }} </p>
+	<hr><hr>
+	{% for o in orders %}
+		<p> Produkt: {{ o.food }} </p>
+		<p> Ilość: {{ o.quantity }} </p>
+		<p> Data zamówienia: {{ o.creation_date }} </p>
+		<hr>
+	{% endfor %}
+	
+{% endblock %}

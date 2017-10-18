@@ -1,0 +1,20 @@
+{% extends "base.html" %}
+
+{% block content %}
+	{% csrf_token %}
+	<p> <a href = "{% url 'get_message' %}">Otrzymane wiadomości</a><p>
+	<p> <a href = "{% url 'message' %}">Utwórz nową wiadomość</a><p>
+	{% if promocje %} 
+	<h3>Twoje promocje</h3>
+		{% for p in promocje %}
+		<p> {{ p.text }} </p>
+		<hr>
+		{% endfor %}
+	{% endif %}
+	
+	{% for t in texts %}
+		<p> {{ t.text }} </p>
+		<p> {{ t.creation_date }} </p>
+		<hr>
+	{% endfor %}
+{% endblock %}

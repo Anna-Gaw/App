@@ -1,10 +1,11 @@
 {% extends "base.html" %}
-{% block content %}
-	<p><a href = "{% url 'new' %}">Zarejestruj</a><p>
 
+{% block content %}
+	<p> <a href = "{% url 'my_message' %}"><button type='submit'>Pokaż moje wiadomości</button></a><p>
 	<form method = 'post'>
 		{% csrf_token %}
 		{{ form.as_p }}
 		<input type= 'submit'>
 	</form>
+	
 {% endblock %}

@@ -1,6 +1,6 @@
 from django import forms
 from django.core.validators import EmailValidator
-
+from .models import Message, Customer, Food
 
 class UserLoginForm(forms.Form):
     username = forms.CharField(label = 'Username')  #, widget= forms.EmailInput) 
@@ -14,4 +14,11 @@ class NewUserForm(forms.Form):
     birth_date = forms.DateField(label = 'Data urodzenia')
     password = forms.CharField(widget=forms.PasswordInput())
     password_2=  forms.CharField(widget=forms.PasswordInput())
+    
+    
+class MessageForm(forms.ModelForm):
+    class Meta:
+        model = Message
+        fields = ('title', 'text' )
+
     

@@ -7,9 +7,8 @@
 		<p>Nick: {{request.user.username }} </p>
 		<p>Email : {{ request.user.email }} </p>
 		<p>Ilość uzyskanych punktów:    </p>
-		
-		</b>
-		<p> <a href = "{% url 'order' %}">Przejdz do menu</a></p>
+		<p><a href = "{% url 'get_message' %}">Otrzymane wiadomości</a></p>
+		<p><a href = "{% url 'message' %}">Wyślij wiadomość do restauracji</a></p>
 		
 		
 {% endblock %}

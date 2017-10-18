@@ -1,16 +1,60 @@
 {% extends "base.html" %}
-
 {% block content %}
-	{% csrf_token %}
+<form method = 'post'>
 	
-	  {% for f in food %}
+	{% csrf_token %}
+		<p><a href = "{% url 'order_list' %}">Pokaż poprzednie zamówienia</a></p>
+		
+	  {% for f in Przystawki %}
 	  	<hr>
 	  	<ul> <h3>{{f.get_type_display }}</h3> </ul>
 	  	<hr>
-	    	<li> {{ f.name }}  cena: {{ f.price }}  ilość: <input type = 'number' maxlenght='2' id ='quantity_id' }}></lo>
+	    	<li> {{ f.name }}  cena: {{ f.price }}  ilość: <input type = 'number' maxlenght='2' name="{{ f.id }}"  value="{{ f.quantity }}"></input></li>
 	    
 	   {% endfor %}
-
-	<p> <a href = "{% url 'base' %}">Cofnij</a><p>
-
+	   
+	   	  {% for f in Zupy %}
+	  	<hr>
+	  	<ul> <h3>{{f.get_type_display }}</h3> </ul>
+	  	<hr>
+	    	<li> {{ f.name }}  cena: {{ f.price }}  ilość: <input type = 'number' maxlenght='2' name="{{ f.id }}"  value="{{ f.quantity }}"></input></li>
+	    
+	   {% endfor %}
+	   
+	   
+	   	  {% for f in Dania %}
+	  	<hr>
+	  	<ul> <h3>{{f.get_type_display }}</h3> </ul>
+	  	<hr>
+	    	<li> {{ f.name }}  cena: {{ f.price }}  ilość: <input type = 'number' maxlenght='2' name="{{ f.id }}"  value="{{ f.quantity }}"></input></li>
+	    
+	   {% endfor %}
+	   
+	   
+	   	  {% for f in Dodatki %}
+	  	<hr>
+	  	<ul> <h3>{{f.get_type_display }}</h3> </ul>
+	  	<hr>
+	    	<li> {{ f.name }}  cena: {{ f.price }}  ilość: <input type = 'number' maxlenght='2' name="{{ f.id }}"  value="{{ f.quantity }}"></input></li>
+	    
+	   {% endfor %}
+	   
+	   
+	   	  {% for f in Desery %}
+	  	<hr>
+	  	<ul> <h3>{{f.get_type_display }}</h3> </ul>
+	  	<hr>
+	    	<li> {{ f.name }}  cena: {{ f.price }}  ilość: <input type = 'number' maxlenght='2' name="{{ f.id }}"  value="{{ f.quantity }}"></input></li>
+	    
+	   {% endfor %}
+	   
+	   	   	  {% for f in Napoje %}
+	  	<hr>
+	  	<ul> <h3>{{f.get_type_display }}</h3> </ul>
+	  	<hr>
+	    	<li> {{ f.name }}  cena: {{ f.price }}  ilość: <input type = 'number' maxlenght='2' name="{{ f.id }}"  value="{{ f.quantity }}"></input></li>
+	    
+	   {% endfor %}
+	<p><button type='submit'>Zamów</button></p>
+	</form>
 {% endblock %}

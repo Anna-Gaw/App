@@ -4,10 +4,13 @@ from django.contrib.auth import authenticate
 from django.contrib.auth import logout, login
 from django.http.response import HttpResponse, HttpResponseRedirect
 from django.urls import reverse, reverse_lazy
-from .forms import UserLoginForm, NewUserForm
+from .forms import UserLoginForm, NewUserForm, MessageForm
 from django.views.generic.edit import CreateView
-from .models import Customer, Food
+from .models import Customer, Food, Message,Order,Bonus
+from django.contrib.auth.hashers import make_password
 from django.views.generic.detail import DetailView
+from django.http import HttpRequest
+
 # Create your views here.
 
 
@@ -30,7 +33,7 @@ class UserLoginView(View):
             )
             if user is not None:
                 login(request, user)
-                return HttpResponseRedirect(reverse('detale'))   
+                return HttpResponseRedirect(reverse('my_message'))   
             else:
                 form.add_error(None, 'Niepoprawne dane logowania...')
                 return render(request, 'user_login.html',  {'form': form})
@@ -66,7 +69,7 @@ class NewUserView(View):
                 last_name = last_name,
                 email= email,
                 birth_date=birth_date,
-                password= password,
+                password= make_password(password,hasher='pbkdf2_sha256')
             )
             url = reverse('detale', kwargs={'user_id': new_user.id})
             return HttpResponseRedirect(url)
@@ -82,13 +85,119 @@ class CustomerDetailView(DetailView):
         }
         return render (request, "customer_detail.html", ctx)
     
-
+#    (1, 'Przystawki'),
+#    (2, 'Zupy'),
+#    (3, 'Dania główne'),
+##    (4, 'Dodatki'),
+#    (5, 'Desery'),
+#    (6, 'napoje')
 class OrderView(DetailView):
     def get(self, request):
-        food = Food.objects.all()
+        Przystawki = Food.objects.filter(type=1)
+        Zupy = Food.objects.filter(type=2)
+        Dania = Food.objects.filter(type=3)
+        Dodatki = Food.objects.filter(type=4)
+        Desery = Food.objects.filter(type=5)
+        Napoje = Food.objects.filter(type=6)
+        
         ctx ={
-            'food': food,
+            'Przystawki': Przystawki,
+            'Zupy': Zupy,
+            'Dania': Dania,
+            'Dodatki': Dodatki,
+            'Desery': Desery,
+            'Napoje': Napoje,
+            
             }
         return  render(request, 'order.html', ctx)
+    def post(self,request):
+        foods = Food.objects.all() 
+        suma_zamowien=0
+        ilosc_zamowien=0
+        for food in foods:
+            #food_obj=Food.objects.get(id=food.id)  
+            quantity=request.POST[str(food.id)] # Poniewaz w order.html mamy nazwe pola name="{{ f.id }}"
+            new_Order = Order.objects.create(
+                customer = request.user,
+                quantity= quantity,
+                food = food,
+            )
+            quant=int(quantity)
+            ilosc_zamowien=ilosc_zamowien+1
+            suma_zamowien=suma_zamowien+(quant*int(food.price))
+            new_Order.save()
+        if(suma_zamowien>150):
+            new_Bonus=Bonus.objects.create(
+                customer=request.user,
+                text="150 rabatu na wude",
+                )
+            new_Bonus.save()
+        url = reverse('order_list')
+        return HttpResponseRedirect(url)
+       # return  render(request, 'order.html', None) 
+class OrderListView(DetailView):
+    def get (self, request):
+       # orders = Order.objects.order_by('-creation_date').all()
+        orders = Order.objects.order_by('-creation_date').filter(customer = request.user)
+        suma_zamowien=0
+        ilosc_zamowien=0
+        for order in orders:
+            quant=int(order.quantity)
+            ilosc_zamowien=ilosc_zamowien+1
+            suma_zamowien=suma_zamowien+(quant*order.food.price)
+            
+        ctx = { 
+            'orders' : orders,
+            'suma_zamowien':suma_zamowien,
+            'ilosc_zamowien':ilosc_zamowien,
+            
+        }
+        return render(request, 'order_list.html', ctx)
         
+        
+class MessageView(View):
+    def get(self, request):
+        form = MessageForm()
+        return  render(request, 'message.html', {'form': form})
+        
+        
+    def post (self, request):
+        form= MessageForm(request.POST)
+        if form.is_valid():
+            title = form.cleaned_data['title']
+            text = form.cleaned_data['text']
+            customer = request.user    
+            new_massage = Message.objects.create(
+                title = title,
+                text= text,
+                customer = customer,
+            )
+            url = reverse('my_message')
+            return HttpResponseRedirect(url)
+        else:
+            return render(request, 'message.html', {'form': form})  
+        
+   
+class MyMessageView(View):
+    def get (self, request):
+        texts = Message.objects.order_by('-creation_date').filter(customer = request.user)
+
+        ctx ={ 
+            'texts' : texts,
+            
+        }
+        return render (request, "all_message.html", ctx)
+    
+    
+class GetMessageView(View):
+    def get (self, request):
+        orders = Order.objects.order_by('-creation_date').filter(customer = request.user)
+        promocje=Bonus.objects.filter(customer=request.user)
+             
+        ctx={"promocje":promocje}
+         
+        return render (request, "get_message.html",ctx)
+      
+   
+   
    

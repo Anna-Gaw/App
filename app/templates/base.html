@@ -1,19 +1,24 @@
 <!DOCTYPE html>
 <html>
 <head>
+{% load staticfiles %}
+<link rel="stylesheet" type="text/css" href="{% static 'css/base.css' %}">
 <meta charset="UTF-8">
 <title>Wesoła</title>
 </head>
 <body>
+	<p>{{ date }}</p>
+
 	{%if request.user.is_authenticated %}
-        <p> <a href = "{% url 'logout' %}">Logout</a></p>
-        <p> {{ request.user.username }}</p>
+	    <p> {{ request.user.username }}
+	    <a href = "{% url 'logout' %}" >Logout</a></p>
+        <div  id='div1'><p><a href = "{% url 'order' %}"><button type='submit'>Pokaż menu</button></a></p>
+        <p><a href='/customers_detail/{{ user_id }}'><button type='submit'>Pokaż dane</button></a></div>
     {% else %}
         <p><a href = "{% url 'login' %}">Login</a></p>
     {% endif %}
-	<p>{{ date }}</p><br>
-	<h1>Restauracja "Wesoła"</h1>
-	{% block content %}{%endblock%}
+	<div id='div2'><h1>Restauracja "Wesoła"</h1>
+	{% block content %}{%endblock%}</div>
 	
 
 </body>

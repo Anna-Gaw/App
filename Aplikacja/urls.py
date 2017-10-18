@@ -15,7 +15,7 @@ Including another URLconf
 """
 from django.conf.urls import url
 from django.contrib import admin
-from app.views import OrderView, CustomerDetailView,  BaseView, UserLoginView, UserLogoutView, NewUserView
+from app.views import OrderListView, GetMessageView, MyMessageView, MessageView,  OrderView, CustomerDetailView,  BaseView, UserLoginView, UserLogoutView, NewUserView
 
 urlpatterns = [
     url(r'^admin/', admin.site.urls),
@@ -24,5 +24,9 @@ urlpatterns = [
     url(r'^logout$', UserLogoutView.as_view(), name = 'logout'),
     url(r'^new_user$', NewUserView.as_view(), name = 'new'),
     url(r'^customers_detail/(?P<user_id>(\d)+)', CustomerDetailView.as_view(), name = 'detale'),
-    url(r'^new_order', OrderView.as_view(), name = 'order')
+    url(r'^new_order', OrderView.as_view(), name = 'order'),
+    url(r'^message', MessageView.as_view(), name='message'),
+    url(r'^my_message', MyMessageView.as_view(), name= 'my_message'),
+    url(r'^get_message', GetMessageView.as_view(), name = 'get_message'),
+    url(r'^order_list', OrderListView.as_view(), name= 'order_list')
 ]
