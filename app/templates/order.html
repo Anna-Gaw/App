@@ -5,54 +5,54 @@
 	{% csrf_token %}
 		<p><a href = "{% url 'order_list' %}">Pokaż poprzednie zamówienia</a></p>
 		
-	  {% for f in Przystawki %}
+	    {% for f in Przystawki %}
 	  	<hr>
 	  	<ul> <h3>{{f.get_type_display }}</h3> </ul>
 	  	<hr>
-	    	<li> {{ f.name }}  cena: {{ f.price }}  ilość: <input type = 'number' maxlenght='2' name="{{ f.id }}"  value="{{ f.quantity }}"></input></li>
+	    	<li> {{ f.name }}  cena: {{ f.price }}  ilość: <input type = 'number' min="0" max="100" name="{{ f.id }}"  value="0"></input></li>
 	    
-	   {% endfor %}
+	    {% endfor %}
 	   
-	   	  {% for f in Zupy %}
+	    {% for f in Zupy %}
 	  	<hr>
 	  	<ul> <h3>{{f.get_type_display }}</h3> </ul>
 	  	<hr>
-	    	<li> {{ f.name }}  cena: {{ f.price }}  ilość: <input type = 'number' maxlenght='2' name="{{ f.id }}"  value="{{ f.quantity }}"></input></li>
+	    	<li> {{ f.name }}  cena: {{ f.price }}  ilość: <input type = 'number' maxlenght='2' name="{{ f.id }}"  value="0"></input></li>
 	    
-	   {% endfor %}
+	    {% endfor %}
 	   
 	   
-	   	  {% for f in Dania %}
+	    {% for f in Dania %}
 	  	<hr>
 	  	<ul> <h3>{{f.get_type_display }}</h3> </ul>
 	  	<hr>
-	    	<li> {{ f.name }}  cena: {{ f.price }}  ilość: <input type = 'number' maxlenght='2' name="{{ f.id }}"  value="{{ f.quantity }}"></input></li>
+	    	<li> {{ f.name }}  cena: {{ f.price }}  ilość: <input type = 'number' maxlenght='2' name="{{ f.id }}"  value="0"></input></li>
 	    
-	   {% endfor %}
+	    {% endfor %}
 	   
 	   
-	   	  {% for f in Dodatki %}
+	    {% for f in Dodatki %}
 	  	<hr>
 	  	<ul> <h3>{{f.get_type_display }}</h3> </ul>
 	  	<hr>
-	    	<li> {{ f.name }}  cena: {{ f.price }}  ilość: <input type = 'number' maxlenght='2' name="{{ f.id }}"  value="{{ f.quantity }}"></input></li>
+	    	<li> {{ f.name }}  cena: {{ f.price }}  ilość: <input type = 'number' maxlenght='2' name="{{ f.id }}"  value="0"></input></li>
 	    
-	   {% endfor %}
+	    {% endfor %}
 	   
 	   
-	   	  {% for f in Desery %}
+	   	{% for f in Desery %}
 	  	<hr>
 	  	<ul> <h3>{{f.get_type_display }}</h3> </ul>
 	  	<hr>
-	    	<li> {{ f.name }}  cena: {{ f.price }}  ilość: <input type = 'number' maxlenght='2' name="{{ f.id }}"  value="{{ f.quantity }}"></input></li>
+	    	<li> {{ f.name }}  cena: {{ f.price }}  ilość: <input type = 'number' maxlenght='2' name="{{ f.id }}"  value="0"></input></li>
 	    
-	   {% endfor %}
+	    {% endfor %}
 	   
-	   	   	  {% for f in Napoje %}
+	   	{% for f in Napoje %}
 	  	<hr>
 	  	<ul> <h3>{{f.get_type_display }}</h3> </ul>
 	  	<hr>
-	    	<li> {{ f.name }}  cena: {{ f.price }}  ilość: <input type = 'number' maxlenght='2' name="{{ f.id }}"  value="{{ f.quantity }}"></input></li>
+	    	<li> {{ f.name }}  cena: {{ f.price }}  ilość: <input type = 'number' maxlenght='2' name="{{ f.id }}"  value="0"></input></li>
 	    
 	   {% endfor %}
 	<p><button type='submit'>Zamów</button></p>

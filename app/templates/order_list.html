@@ -7,10 +7,12 @@
 	<p>Suma zamowien: {{ suma_zamowien }} </p>
 	<hr><hr>
 	{% for o in orders %}
-		<p> Produkt: {{ o.food }} </p>
-		<p> Ilość: {{ o.quantity }} </p>
-		<p> Data zamówienia: {{ o.creation_date }} </p>
-		<hr>
+		{% if o.quantity != 0 %}
+			<p> Produkt: {{ o.food }} </p>
+			<p> Ilość: {{ o.quantity }} </p>
+			<p> Data zamówienia: {{ o.creation_date }} </p>
+			<hr>
+		{% endif %}
 	{% endfor %}
 	
 {% endblock %}

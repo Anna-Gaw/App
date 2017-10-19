@@ -13,7 +13,7 @@
 	    <p> {{ request.user.username }}
 	    <a href = "{% url 'logout' %}" >Logout</a></p>
         <div  id='div1'><p><a href = "{% url 'order' %}"><button type='submit'>Pokaż menu</button></a></p>
-        <p><a href='/customers_detail/{{ user_id }}'><button type='submit'>Pokaż dane</button></a></div>
+        <p><a href='/customers_detail/{{ user_id }}'><button type='submit'>Pokaż dane</button></a><br><br><br><br></div>
     {% else %}
         <p><a href = "{% url 'login' %}">Login</a></p>
     {% endif %}

@@ -10,6 +10,7 @@ from .models import Customer, Food, Message,Order,Bonus
 from django.contrib.auth.hashers import make_password
 from django.views.generic.detail import DetailView
 from django.http import HttpRequest
+from django.contrib.auth.mixins import LoginRequiredMixin
 
 # Create your views here.
 
@@ -71,7 +72,7 @@ class NewUserView(View):
                 birth_date=birth_date,
                 password= make_password(password,hasher='pbkdf2_sha256')
             )
-            url = reverse('detale', kwargs={'user_id': new_user.id})
+            url = reverse('login', kwargs={'user_id': new_user.id})
             return HttpResponseRedirect(url)
         else:
             return render(request, 'new_user.html', {'form': form})  
@@ -91,7 +92,7 @@ class CustomerDetailView(DetailView):
 ##    (4, 'Dodatki'),
 #    (5, 'Desery'),
 #    (6, 'napoje')
-class OrderView(DetailView):
+class OrderView(LoginRequiredMixin, DetailView):
     def get(self, request):
         Przystawki = Food.objects.filter(type=1)
         Zupy = Food.objects.filter(type=2)
@@ -126,21 +127,29 @@ class OrderView(DetailView):
             ilosc_zamowien=ilosc_zamowien+1
             suma_zamowien=suma_zamowien+(quant*int(food.price))
             new_Order.save()
-        if(suma_zamowien>150):
+        if(suma_zamowien>300 and suma_zamowien <= 500):
             new_Bonus=Bonus.objects.create(
                 customer=request.user,
-                text="150 rabatu na wude",
+                text="10% rabatu do wykorzystania w lokalu",
+                
                 )
             new_Bonus.save()
         url = reverse('order_list')
+        if (suma_zamowien > 500):
+            new_Bonus=Bonus.objects.create(
+                customer=request.user,
+                text = "15% zniżki na dania głowne do wykorzystania  w lokalu",
+                )
+            new_Bonus.save()
         return HttpResponseRedirect(url)
-       # return  render(request, 'order.html', None) 
-class OrderListView(DetailView):
+#         return  render(request, 'order.html', None) 
+class OrderListView(LoginRequiredMixin, DetailView):
     def get (self, request):
-       # orders = Order.objects.order_by('-creation_date').all()
+#         orders = Order.objects.order_by('-creation_date').all()
         orders = Order.objects.order_by('-creation_date').filter(customer = request.user)
         suma_zamowien=0
         ilosc_zamowien=0
+        
         for order in orders:
             quant=int(order.quantity)
             ilosc_zamowien=ilosc_zamowien+1
@@ -155,7 +164,7 @@ class OrderListView(DetailView):
         return render(request, 'order_list.html', ctx)
         
         
-class MessageView(View):
+class MessageView(LoginRequiredMixin, View):
     def get(self, request):
         form = MessageForm()
         return  render(request, 'message.html', {'form': form})
@@ -178,7 +187,7 @@ class MessageView(View):
             return render(request, 'message.html', {'form': form})  
         
    
-class MyMessageView(View):
+class MyMessageView(LoginRequiredMixin, View):
     def get (self, request):
         texts = Message.objects.order_by('-creation_date').filter(customer = request.user)
 
@@ -189,12 +198,14 @@ class MyMessageView(View):
         return render (request, "all_message.html", ctx)
     
     
-class GetMessageView(View):
+class GetMessageView(LoginRequiredMixin, View):
     def get (self, request):
         orders = Order.objects.order_by('-creation_date').filter(customer = request.user)
-        promocje=Bonus.objects.filter(customer=request.user)
+        promocje=Bonus.objects.order_by('-creation_date').filter(customer=request.user)
              
-        ctx={"promocje":promocje}
+        ctx={
+            "promocje":promocje,
+        }
          
         return render (request, "get_message.html",ctx)
       

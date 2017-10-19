@@ -1,17 +1,31 @@
 @CHARSET "UTF-8";
 
 body {
-    font-family: 'Roboto Condensed', sans-serif;
+    font-family:  'Open Sans';
+  	font-style: italic;
+  	color: white;
     background-color: lightblue;
-    background-image: url("../img/tlo.jpg");
+    background-image: url("../img/tlo2.jpg");
     background-size: 100%, 100%;
+}
+a:link {
+    color: white;
+    
 
+}
+a:visited{ 
+	color :salmon;
+	
 }
 #div1 {
 	text-align: right;
+	background-image: url("../img/z.jpg");
+    background-repeat: no-repeat;
+	background-position: center;
 }
 #div2 {
 	text-align: center;
+	
 }
 button {
     font-size: 18px;

@@ -3,7 +3,7 @@ from django.core.validators import EmailValidator
 from .models import Message, Customer, Food
 
 class UserLoginForm(forms.Form):
-    username = forms.CharField(label = 'Username')  #, widget= forms.EmailInput) 
+    username = forms.CharField(label = 'Username')   
     password= forms.CharField(label = 'Hasło', widget= forms.PasswordInput)
     
 class NewUserForm(forms.Form):
@@ -20,5 +20,6 @@ class MessageForm(forms.ModelForm):
     class Meta:
         model = Message
         fields = ('title', 'text' )
+   
 
     
