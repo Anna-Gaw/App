@@ -11,6 +11,7 @@ from django.contrib.auth.hashers import make_password
 from django.views.generic.detail import DetailView
 from django.http import HttpRequest
 from django.contrib.auth.mixins import LoginRequiredMixin
+from datetime import datetime, timedelta
 
 # Create your views here.
 
@@ -72,7 +73,7 @@ class NewUserView(View):
                 birth_date=birth_date,
                 password= make_password(password,hasher='pbkdf2_sha256')
             )
-            url = reverse('login', kwargs={'user_id': new_user.id})
+            url = reverse('login')
             return HttpResponseRedirect(url)
         else:
             return render(request, 'new_user.html', {'form': form})  
@@ -89,10 +90,10 @@ class CustomerDetailView(DetailView):
 #    (1, 'Przystawki'),
 #    (2, 'Zupy'),
 #    (3, 'Dania główne'),
-##    (4, 'Dodatki'),
+#    (4, 'Dodatki'),
 #    (5, 'Desery'),
 #    (6, 'napoje')
-class OrderView(LoginRequiredMixin, DetailView):
+class OrderView(DetailView):
     def get(self, request):
         Przystawki = Food.objects.filter(type=1)
         Zupy = Food.objects.filter(type=2)
@@ -142,29 +143,39 @@ class OrderView(LoginRequiredMixin, DetailView):
                 )
             new_Bonus.save()
         return HttpResponseRedirect(url)
+        
 #         return  render(request, 'order.html', None) 
-class OrderListView(LoginRequiredMixin, DetailView):
+class OrderListView(DetailView):
     def get (self, request):
 #         orders = Order.objects.order_by('-creation_date').all()
         orders = Order.objects.order_by('-creation_date').filter(customer = request.user)
-        suma_zamowien=0
-        ilosc_zamowien=0
-        
+        last_orders = Order.objects.filter(creation_date__gte= datetime.now()-timedelta(minutes=0.5)) 
+        suma=0
+        quant_orders=0
+        last_order= 0
+       
+#         import pdb ; pdb.set_trace()
+        for order in last_orders:  
+            last_order += int(order.quantity)*order.food.price
         for order in orders:
             quant=int(order.quantity)
-            ilosc_zamowien=ilosc_zamowien+1
-            suma_zamowien=suma_zamowien+(quant*order.food.price)
+            quant_orders+=quant
+            suma=suma+(quant*order.food.price)
             
+            
+#             last_order= (order.quantity * order.food.price)
+
         ctx = { 
             'orders' : orders,
-            'suma_zamowien':suma_zamowien,
-            'ilosc_zamowien':ilosc_zamowien,
+            'suma':suma,
+            'quant_orders':quant_orders,
+            'last_order': last_order,
             
         }
         return render(request, 'order_list.html', ctx)
         
         
-class MessageView(LoginRequiredMixin, View):
+class MessageView(View):
     def get(self, request):
         form = MessageForm()
         return  render(request, 'message.html', {'form': form})
@@ -187,7 +198,7 @@ class MessageView(LoginRequiredMixin, View):
             return render(request, 'message.html', {'form': form})  
         
    
-class MyMessageView(LoginRequiredMixin, View):
+class MyMessageView(View):
     def get (self, request):
         texts = Message.objects.order_by('-creation_date').filter(customer = request.user)
 
@@ -198,7 +209,7 @@ class MyMessageView(LoginRequiredMixin, View):
         return render (request, "all_message.html", ctx)
     
     
-class GetMessageView(LoginRequiredMixin, View):
+class GetMessageView(View):
     def get (self, request):
         orders = Order.objects.order_by('-creation_date').filter(customer = request.user)
         promocje=Bonus.objects.order_by('-creation_date').filter(customer=request.user)

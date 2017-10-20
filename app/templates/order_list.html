@@ -3,8 +3,12 @@
 {% block content %}
 	{% csrf_token %}
 	<p> Lista Twoich zamówień</p>
-	<p>Ilosc zamowien: {{ ilosc_zamowien }}</p>
-	<p>Suma zamowien: {{ suma_zamowien }} </p>
+	<p> Cena ostatniego zamówienia: {{ last_order }} </p>
+	<br>
+	<p>Ilosc wszystkich zamówionych produktów: {{ quant_orders }}</p>
+	<p>Cena wszystkich zamowień: {{ suma }} </p>
+	
+	
 	<hr><hr>
 	{% for o in orders %}
 		{% if o.quantity != 0 %}

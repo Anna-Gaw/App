@@ -17,7 +17,7 @@ kind_of_food = (
     (3, 'Dania główne'),
     (4, 'Dodatki'),
     (5, 'Desery'),
-    (6, 'napoje')
+    (6, 'Napoje')
 )
     
 class Food(models.Model):

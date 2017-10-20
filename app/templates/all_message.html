@@ -6,8 +6,8 @@
 	<p> <a href = "{% url 'message' %}">Utwórz nową wiadomość</a><p>
 	<h3>Wiadomości</h3>
 	{% for t in texts %}
-		<p> {{ t.title }}</p>
-		<p> {{ t.text }} </p>
+		<p> Tytuł: {{ t.title }}</p>
+		<p> Treść: {{ t.text }} </p>
 		<p> {{ t.creation_date }} </p>
 	
 		<hr>
